@@ -25,14 +25,16 @@ const saveSubscription = async subscription => {
   return response.json();
 };
 
-self.addEventListener("install", async () => {
+self.addEventListener("activate", async () => {
+  console.log('xxxx');
   // This will be called only once when the service worker is installed for first time.
   try {
     const applicationServerKey = urlB64ToUint8Array(
-      "BJ5IxJBWdeqFDJTvrZ4wNRu7UY2XigDXjgiUBYEYVXDudxhEs0ReOJRBcBHsPYgZ5dyV8VjyqzbQKS8V7bUAglk"
+      "BBxPtM6fQs6k3A5nMeYbwWvaXVvZdMWJTOZmafge67eXi9oXcX9wzLwzUSefSqmgA9WPgctLvdg0-zRrSEPAxGw"
     );
     const options = { applicationServerKey, userVisibleOnly: true };
     const subscription = await self.registration.pushManager.subscribe(options);
+    console.log('xxxx', subscription);
     const response = await saveSubscription(subscription);
     console.log(response);
   } catch (err) {
@@ -40,8 +42,13 @@ self.addEventListener("install", async () => {
   }
 });
 
-self.addEventListener("push", function(event) {
+self.addEventListener("push", function (event) {
   if (event.data) {
+    const title = 'Simple Title';
+    const optionss = {
+      body: 'Simple piece of body text.\nSecond line of body text :)'
+    };
+    registration.showNotification(title, optionss);
     console.log("Push event!! ", event.data.text());
   } else {
     console.log("Push event but no data");
